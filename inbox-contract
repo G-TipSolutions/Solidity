@@ -1,0 +1,77 @@
+const assert = require('assert');
+const ganache = require('ganache-cli');
+const Web3 = require('web3');
+const web3 = new Web3(ganache.provider());
+const { interface, bytecode } = require('../compile');
+
+let accounts;
+let inbox;
+
+beforeEach(async () => {
+  //Get a list of all accounts
+  accounts = await new web3.eth.getAccounts();
+
+ //Use one of those accounts to deploy
+  //the contract
+  inbox = await new web3.eth.Contract(JSON.parse(interface))
+  .deploy({ data: bytecode, arguments: ['Hi there!'] })
+  .send({ from: accounts[0], gas: '1000000' })
+});
+
+describe('Inbox', () => {
+  it('deploys a contract', () => {
+    console.log(inbox);
+  });
+});
+
+==============================================================
+
+const path = require('path');
+const fs = require('fs');
+const solc = require('solc');
+
+const InboxPath = path.resolve(__dirname, 'contracts', 'inbox.sol');
+const source = fs.readFileSync(inboxPath, 'utf8')
+
+module.exports = solc.compile(source, 1).contracts[':inbox'];
+===================================================================
+
+bgsho@G-TipSolutions MINGW64 ~/OneDrive/Documents/Solidity/inbox
+$ npm run test
+
+> inbox@1.0.0 test
+> mocha
+
+
+Error: Cannot find module 'solc'
+Require stack:
+- C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\compile.js
+- C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\test\Inbox.test.js
+    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:933:15)
+    at Function.Module._load (node:internal/modules/cjs/loader:778:27)
+    at Module.require (node:internal/modules/cjs/loader:1005:19)
+    at require (node:internal/modules/cjs/helpers:102:18)
+    at Object.<anonymous> (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\compile.js:3:14)
+    at Module._compile (node:internal/modules/cjs/loader:1103:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1155:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at Module.require (node:internal/modules/cjs/loader:1005:19)
+    at require (node:internal/modules/cjs/helpers:102:18)
+    at Object.<anonymous> (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\test\Inbox.test.js:5:33)
+    at Module._compile (node:internal/modules/cjs/loader:1103:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1155:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:168:29)
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async Promise.all (index 0)
+    at ESMLoader.import (node:internal/modules/esm/loader:337:24)
+    at importModuleDynamicallyWrapper (node:internal/vm/module:437:15)
+    at formattedImport (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\node_modules\mocha\lib\nodejs\esm-utils.js:7:14)
+    at Object.exports.requireOrImport (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\node_modules\mocha\lib\nodejs\esm-utils.js:48:32)
+    at Object.exports.loadFilesAsync (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\node_modules\mocha\lib\nodejs\esm-utils.js:103:20)
+    at singleRun (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\node_modules\mocha\lib\cli\run-helpers.js:125:3)
+    at Object.exports.handler (C:\Users\bgsho\OneDrive\Documents\Solidity\inbox\node_modules\mocha\lib\cli\run.js:374:5)
+
+bgsho@G-TipSolutions MINGW64 ~/OneDrive/Documents/Solidity/inbox
